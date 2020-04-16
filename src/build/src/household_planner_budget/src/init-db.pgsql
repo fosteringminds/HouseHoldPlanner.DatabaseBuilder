@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS household_planner_budget;
+CREATE DATABASE household_planner_budget;
