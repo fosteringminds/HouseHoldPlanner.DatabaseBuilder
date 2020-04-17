@@ -6,13 +6,14 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using HouseHoldPlanner.DatabaseBuilder.Models;
 using HouseHoldPlanner.DatabaseBuilder.Processor;
+using System.Threading.Tasks;
 
 namespace HouseHoldPlanner.DatabaseBuilder.Tests
 {
     public class DatabaseBuilderTests
     {
         [Fact]
-        public void CreateMigration_Test()
+        public async Task InitializeMigrationLogDb_DatabaseExists_Test()
         {
             //need a script to create the database or do we go straight into postgres itself and create the database?
 
@@ -33,24 +34,12 @@ namespace HouseHoldPlanner.DatabaseBuilder.Tests
 
             //need a method returning a list of migrations from the migrations directory
             MigrationProcessor migrationProcessor = new MigrationProcessor(databaseBuilderSettings);
-            migrationProcessor.Run();
+            await migrationProcessor.Run();
 
             Assert.NotNull(migrationProcessor.MigrationLog);
             Assert.True(migrationProcessor.MigrationLog.Count > 0);
-
-            /*
-            NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder();
-            connectionStringBuilder.Username = "postgres";
-            connectionStringBuilder.Password = "postgres";
-            connectionStringBuilder.Host = "localhost";
-
-            Assert.NotNull(connectionStringBuilder.ConnectionString);
-
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
-            {
-                conn.Execute("CREATE DATABASE databasebuilder;");
-            }
-            */
+            Assert.True(migrationProcessor.MigrationLogDbExists);
+            Assert.True(migrationProcessor.MigrationLogDbTableExists);
         }
     }
 }
