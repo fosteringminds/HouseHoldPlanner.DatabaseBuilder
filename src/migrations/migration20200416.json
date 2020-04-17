@@ -1,0 +1,11 @@
+{
+    "DatabaseName": "household_planner_databasebuilder",
+    "MigrationDate": "2020/04/16",
+    "MigrationName": "Household Planner Database Builder Database",
+    "MigrationScripts": [
+        {
+            "ScriptName:": "Create Database Migration Log Table",
+            "ScriptPath": "household_databasebuilder_migration_log.pgsql"
+        }
+    ]
+}

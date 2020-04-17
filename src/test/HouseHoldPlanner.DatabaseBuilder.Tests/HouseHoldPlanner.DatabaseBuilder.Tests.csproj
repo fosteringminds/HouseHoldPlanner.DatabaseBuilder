@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\databasebuilder\HouseHoldPlanner.DatabaseBuilder.MigrationProcessor\HouseHoldPlanner.DatabaseBuilder.MigrationProcessor.csproj" />
     <ProjectReference Include="..\..\databasebuilder\HouseHoldPlanner.DatabaseBuilder.Models\HouseHoldPlanner.DatabaseBuilder.Models.csproj" />
   </ItemGroup>
 
