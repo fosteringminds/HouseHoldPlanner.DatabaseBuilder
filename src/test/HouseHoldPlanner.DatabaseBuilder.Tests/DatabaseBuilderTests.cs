@@ -5,7 +5,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using HouseHoldPlanner.DatabaseBuilder.Models;
-using HouseHoldPlanner.DatabaseBuilder.MigrationProcessor;
+using HouseHoldPlanner.DatabaseBuilder.Processor;
 
 namespace HouseHoldPlanner.DatabaseBuilder.Tests
 {
@@ -25,15 +25,18 @@ namespace HouseHoldPlanner.DatabaseBuilder.Tests
             IConfiguration config = builder.Build();
             config.GetSection("DatabaseBuilderSettings").Bind(databaseBuilderSettings);
 
-            Assert.True(databaseBuilderSettings.SqlSourceDir.Length > 0);
-            Assert.True(databaseBuilderSettings.MigrationSourceDir.Length > 0);
-            Assert.True(databaseBuilderSettings.DatabaseHost.Length > 0);
-            Assert.True(databaseBuilderSettings.DatabaseUserName.Length > 0);
-            Assert.True(databaseBuilderSettings.DatabasePassword.Length > 0);
+            Assert.True(!string.IsNullOrWhiteSpace(databaseBuilderSettings.SqlSourceDir));
+            Assert.True(!string.IsNullOrWhiteSpace(databaseBuilderSettings.MigrationSourceDir));
+            Assert.True(!string.IsNullOrWhiteSpace(databaseBuilderSettings.DatabaseHost));
+            Assert.True(!string.IsNullOrWhiteSpace(databaseBuilderSettings.DatabaseUserName));
+            Assert.True(!string.IsNullOrWhiteSpace(databaseBuilderSettings.DatabasePassword));
 
             //need a method returning a list of migrations from the migrations directory
-            MigrationProcessor migrationProcessor = new MigrationProcessor();
+            MigrationProcessor migrationProcessor = new MigrationProcessor(databaseBuilderSettings);
+            migrationProcessor.Run();
 
+            Assert.NotNull(migrationProcessor.MigrationLog);
+            Assert.True(migrationProcessor.MigrationLog.Count > 0);
 
             /*
             NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder();
