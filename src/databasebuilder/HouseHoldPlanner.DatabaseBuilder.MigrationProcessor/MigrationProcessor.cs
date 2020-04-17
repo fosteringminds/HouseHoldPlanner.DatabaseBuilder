@@ -116,10 +116,13 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
 
             try
             {
-                var q = await dbConnection.QueryFirstAsync<string>("SELECT schema_name FROM information_schema.schemata WHERE schema_name = :MigrationLogSchemaName;", new { databaseBuilderSettings.MigrationLogSchemaName });
-                if(q != null)
+                using (dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
                 {
-                    schemaExists = true;
+                    var q = await dbConnection.QueryFirstOrDefaultAsync<string>("SELECT schema_name FROM information_schema.schemata WHERE schema_name = :MigrationLogSchemaName;", new { databaseBuilderSettings.MigrationLogSchemaName });
+                    if (q != null)
+                    {
+                        schemaExists = true;
+                    }
                 }
             }
             catch(PostgresException pex)
@@ -142,12 +145,13 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
                 {
                     using (dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
                     {
-                        await dbConnection.ExecuteAsync($@"
-                        set search_path {databaseBuilderSettings.MigrationLogSchemaName};
+                        var commandText = $@"
+                        set search_path={databaseBuilderSettings.MigrationLogSchemaName};
                         create table {databaseBuilderSettings.MigrationLogDbTableName} (
                             migration_log_id serial primary key not null,
-                            migration_log jsonb(50) not null,
-                            created_at timestamptz default current_timestamp);");
+                            migration_log jsonb not null,
+                            created_at timestamptz default current_timestamp);";
+                        await dbConnection.ExecuteAsync(commandText);
                     }
                 }
                 catch (PostgresException pex)
@@ -167,15 +171,18 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
 
             try
             {
-                tableExists = await dbConnection.QueryFirstAsync<bool>(
-                    @"SELECT EXISTS(
+                using (dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
+                {
+                    tableExists = await dbConnection.QueryFirstAsync<bool>(
+                        @"SELECT EXISTS(
                         SELECT *
                         FROM information_schema.tables
                         WHERE
                           table_schema = :MigrationLogSchemaName AND
                           table_name = :MigrationLogDbTableName
                     );",
-                    new { databaseBuilderSettings.MigrationLogSchemaName, databaseBuilderSettings.MigrationLogDbTableName });
+                        new { databaseBuilderSettings.MigrationLogSchemaName, databaseBuilderSettings.MigrationLogDbTableName });
+                }
             }
             catch (PostgresException pex)
             {

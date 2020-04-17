@@ -38,8 +38,6 @@ namespace HouseHoldPlanner.DatabaseBuilder.Tests
 
             Assert.NotNull(migrationProcessor.MigrationLog);
             Assert.True(migrationProcessor.MigrationLog.Count > 0);
-            Assert.True(migrationProcessor.MigrationLogDbExists);
-            Assert.True(migrationProcessor.MigrationLogDbTableExists);
         }
     }
 }
