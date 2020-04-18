@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BF77EA52
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HouseHoldPlanner.DatabaseBuilder.Models", "databasebuilder\HouseHoldPlanner.DatabaseBuilder.Models\HouseHoldPlanner.DatabaseBuilder.Models.csproj", "{1B629B80-3B9A-480D-962A-5C13F4326A6E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrationProcessor", "MigrationProcessor", "{1415561B-7E04-4C48-9408-FE573245C2D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HouseHoldPlanner.DatabaseBuilder.MigrationProcessor", "databasebuilder\HouseHoldPlanner.DatabaseBuilder.MigrationProcessor\HouseHoldPlanner.DatabaseBuilder.MigrationProcessor.csproj", "{A0DAD809-417F-413A-A254-7ABA422A5690}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,18 @@ Global
 		{1B629B80-3B9A-480D-962A-5C13F4326A6E}.Release|x64.Build.0 = Release|Any CPU
 		{1B629B80-3B9A-480D-962A-5C13F4326A6E}.Release|x86.ActiveCfg = Release|Any CPU
 		{1B629B80-3B9A-480D-962A-5C13F4326A6E}.Release|x86.Build.0 = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|x64.Build.0 = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0DAD809-417F-413A-A254-7ABA422A5690}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +68,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B697F320-E06F-4AEA-B692-8755F0F6C432} = {BF77EA52-30D6-4389-B12A-06385EA265D3}
 		{1B629B80-3B9A-480D-962A-5C13F4326A6E} = {A76387C7-A6ED-456A-B3EA-BC4A0C522141}
+		{A0DAD809-417F-413A-A254-7ABA422A5690} = {1415561B-7E04-4C48-9408-FE573245C2D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {16801053-3EDF-4F4A-8C2C-816B8AE2C676}

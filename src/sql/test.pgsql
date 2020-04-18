@@ -1,0 +1,2 @@
+set search_path=household_planner_db_migration;
+create table migration_log (migration_log_id serial primary key not null,migration_log jsonb(50) not null,created_at timestamptz default current_timestamp);
