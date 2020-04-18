@@ -40,7 +40,7 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
             if (!Directory.Exists(databaseBuilderSettings.MigrationSourceDir))
                 throw new DirectoryNotFoundException("The migration directory does not exist");
 
-            MigrationLog = new List<MigrationLog>();
+            MigrationLogs = new List<MigrationLog>();
             DirectoryInfo di = new DirectoryInfo(databaseBuilderSettings.MigrationSourceDir);
             var fileInfo = di.GetFiles("migration*.json");
             foreach(var fi in fileInfo)
@@ -50,7 +50,7 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
                     string json = "";
                     while ((json = await reader.ReadLineAsync()) != null)
                     {
-                       MigrationLog.AddRange(JsonConvert.DeserializeObject<IEnumerable<MigrationLog>>(json));
+                       MigrationLogs.AddRange(JsonConvert.DeserializeObject<IEnumerable<MigrationLog>>(json));
                     }
                 }
             }
@@ -148,9 +148,12 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
                     {
                         var commandText = $@"
                         set search_path={databaseBuilderSettings.MigrationLogSchemaName};
+                        drop table {databaseBuilderSettings.MigrationLogDbTableName};
                         create table {databaseBuilderSettings.MigrationLogDbTableName} (
                             migration_log_id serial primary key not null,
                             migration_log jsonb not null,
+                            migration_name varchar(100),
+                            migration_date date,
                             created_at timestamptz default current_timestamp);";
                         await dbConnection.ExecuteAsync(commandText);
                     }
@@ -203,14 +206,14 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
             {
                 using (dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
                 {
-                    foreach (var migrationLog in MigrationLog)
+                    foreach (var migrationLog in MigrationLogs)
                     {
                         var migrationLogJson = JsonConvert.SerializeObject(migrationLog);
                         migrationLog.MigrationLogId = await dbConnection.QueryFirstOrDefaultAsync<long>(
                             $@"
                             set search_path={databaseBuilderSettings.MigrationLogSchemaName};
-                            INSERT INTO {databaseBuilderSettings.MigrationLogDbTableName}(migration_log)VALUES(cast(:migrationLogJson as json)) returning migration_log_id;",
-                            new { migrationLogJson });
+                            INSERT INTO {databaseBuilderSettings.MigrationLogDbTableName}(migration_log,migration_name,migration_date)VALUES(cast(:migrationLogJson as json),:MigrationName,:MigrationDate) returning migration_log_id;",
+                            new { migrationLogJson, migrationLog.MigrationName, migrationLog.MigrationDate });
                     }
                 }
             }
@@ -224,6 +227,6 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
             }
         }
 
-        public List<MigrationLog> MigrationLog { get; private set; }
+        public List<MigrationLog> MigrationLogs { get; private set; }
     }
 }
