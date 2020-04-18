@@ -66,6 +66,7 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
             await CreateMigrationLogDb();
             await CreateMigrationLogSchema();
             await CreateMigrationLogTable();
+            await SaveMigrationLogs();
         }
 
         private async Task CreateMigrationLogDb()
@@ -194,6 +195,33 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
             }
 
             return tableExists;
+        }
+
+        private async Task SaveMigrationLogs()
+        {
+            try
+            {
+                using (dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
+                {
+                    foreach (var migrationLog in MigrationLog)
+                    {
+                        var migrationLogJson = JsonConvert.SerializeObject(migrationLog);
+                        migrationLog.MigrationLogId = await dbConnection.QueryFirstOrDefaultAsync<long>(
+                            $@"
+                            set search_path={databaseBuilderSettings.MigrationLogSchemaName};
+                            INSERT INTO {databaseBuilderSettings.MigrationLogDbTableName}(migration_log)VALUES(cast(:migrationLogJson as json)) returning migration_log_id;",
+                            new { migrationLogJson });
+                    }
+                }
+            }
+            catch (PostgresException pex)
+            {
+                throw pex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public List<MigrationLog> MigrationLog { get; private set; }

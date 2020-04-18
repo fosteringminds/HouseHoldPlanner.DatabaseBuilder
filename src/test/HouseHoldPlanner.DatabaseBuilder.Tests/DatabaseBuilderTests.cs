@@ -7,6 +7,7 @@ using System.IO;
 using HouseHoldPlanner.DatabaseBuilder.Models;
 using HouseHoldPlanner.DatabaseBuilder.Processor;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace HouseHoldPlanner.DatabaseBuilder.Tests
 {
@@ -38,6 +39,7 @@ namespace HouseHoldPlanner.DatabaseBuilder.Tests
 
             Assert.NotNull(migrationProcessor.MigrationLog);
             Assert.True(migrationProcessor.MigrationLog.Count > 0);
+            Assert.True(migrationProcessor.MigrationLog.First().MigrationLogId > 0);
         }
     }
 }
