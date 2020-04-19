@@ -37,9 +37,9 @@ namespace HouseHoldPlanner.DatabaseBuilder.Tests
             MigrationProcessor migrationProcessor = new MigrationProcessor(databaseBuilderSettings);
             await migrationProcessor.Run();
 
-            Assert.NotNull(migrationProcessor.MigrationLog);
-            Assert.True(migrationProcessor.MigrationLog.Count > 0);
-            Assert.True(migrationProcessor.MigrationLog.First().MigrationLogId > 0);
+            Assert.NotNull(migrationProcessor.MigrationLogs);
+            Assert.True(migrationProcessor.MigrationLogs.Count > 0);
+            Assert.True(migrationProcessor.MigrationLogs.First().MigrationLogId > 0);
         }
     }
 }
