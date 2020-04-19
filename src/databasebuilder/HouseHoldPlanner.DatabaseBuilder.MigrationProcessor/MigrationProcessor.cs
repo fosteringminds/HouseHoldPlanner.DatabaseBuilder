@@ -148,7 +148,6 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
                     {
                         var commandText = $@"
                         set search_path={databaseBuilderSettings.MigrationLogSchemaName};
-                        drop table {databaseBuilderSettings.MigrationLogDbTableName};
                         create table {databaseBuilderSettings.MigrationLogDbTableName} (
                             migration_log_id serial primary key not null,
                             migration_log jsonb not null,
@@ -213,7 +212,7 @@ namespace HouseHoldPlanner.DatabaseBuilder.Processor
                             $@"
                             set search_path={databaseBuilderSettings.MigrationLogSchemaName};
                             INSERT INTO {databaseBuilderSettings.MigrationLogDbTableName}(migration_log,migration_name,migration_date)VALUES(cast(:migrationLogJson as json),:MigrationName,:MigrationDate) returning migration_log_id;",
-                            new { migrationLogJson, migrationLog.MigrationName, migrationLog.MigrationDate });
+                            new { migrationLogJson, migrationLog.MigrationLogName, migrationLog.MigrationLogDate });
                     }
                 }
             }
